@@ -72,7 +72,7 @@ def create_deck():
 
 
 def draw(hand, deck):
-    # First condition : hand mustn't have space in it (upper limite of 7)
+    # First condition : hand mustn't have space in it (upper limit of 7)
     while len(hand) < 7:
         # Second condition : the deck must be empty
         if len(deck) > 0:
@@ -158,7 +158,7 @@ def create_sum_domino_hand(hand):
 def check_defeat(sum_domino_hand, objective):
     for sum_domino in sum_domino_hand:
         if sum_domino == objective:
-            # Objective is 12 with the current ruleset, but it can be changed easily
+            # Objective is 12 with the current rule-set, but it can be changed easily
             return True
 
     for i in range(len(sum_domino_hand)):
@@ -166,7 +166,7 @@ def check_defeat(sum_domino_hand, objective):
         sum_domino_hand_recursive = [sum_domino_hand[j] for j in range(len(sum_domino_hand)) if (j != i)]
         if check_defeat(sum_domino_hand_recursive, objective_temp-sum_domino_hand[i]):
             return True
-            # We use recursivity to check for every combination,
+            # We use a recursive algorithm to check for every combination,
             # to see if the player is stuck with an unplayable hand
 
     return False
