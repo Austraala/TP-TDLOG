@@ -63,6 +63,8 @@ class Solitaire:
 
         #    We print the dominoes.
         for domino in self.hand:
+            index = self.hand.index(domino) + 1
+            domino.index = index
             print(domino.__str__())
 
         #   We wait for the discard.
