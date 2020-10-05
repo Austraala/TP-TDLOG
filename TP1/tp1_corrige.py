@@ -120,10 +120,10 @@ def play():
 
         # count the sum of the selected dominos
         try:
-            indexes = set(sorted(
-                [int(idx) - 1 for idx in indexes], reverse=True))
+            indexes = sorted(
+                {int(idx) - 1 for idx in indexes}, reverse=True)
             total = sum(hand[idx][0] + hand[idx][1] for idx in indexes)
-        except (TypeError, IndexError):
+        except (ValueError, IndexError):
             print('invalid indexes')
             continue
 
