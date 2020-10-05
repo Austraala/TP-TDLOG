@@ -7,6 +7,10 @@
 
 
 class Domino:
+    """
+    We define the Domino class
+    It contains two integers corresponding to the left and right part of it
+    """
     #   We give the two numbers on both halves of the Domino
     right = None
     left = None
@@ -22,10 +26,18 @@ class Domino:
     #   First, we define all static methods needed
     @staticmethod
     def print_line():
+        """
+        We return the string corresponding to the top and bottom part of a domino
+        """
         return "     +-----|-----+"
 
     @staticmethod
     def create_str_domino(number):
+        """
+        To a number, we create the strings
+        corresponding to the medium lines of a domino
+        associated to this number
+        """
         if number == 0:
             line_1 = '     '
             line_2 = '     '
@@ -58,13 +70,15 @@ class Domino:
 
     @staticmethod
     def print_one_domino(domino_to_print):
-        # We generate the lines of the domino
-        # This function gets a Domino object plugged in
+        """
+        We generate the lines of the full domino
+        This function gets a Domino object plugged in
+        """
         left_line_1, left_line_2, left_line_3 = Domino.create_str_domino(domino_to_print.left)
         right_line_1, right_line_2, right_line_3 = Domino.create_str_domino(domino_to_print.right)
-        line_1 = '      |{0}|{1}|'.format(left_line_1, right_line_1)
-        line_2 = '({0}) |{1}|{2}|'.format(domino_to_print.index, left_line_2, right_line_2)
-        line_3 = '      |{0}|{1}|'.format(left_line_3, right_line_3)
+        line_1 = '     |{0}|{1}|'.format(left_line_1, right_line_1)
+        line_2 = '({0})  |{1}|{2}|'.format(domino_to_print.index, left_line_2, right_line_2)
+        line_3 = '     |{0}|{1}|'.format(left_line_3, right_line_3)
 
         printed_lines = [line_1, line_2, line_3]
 
@@ -94,10 +108,7 @@ class Domino:
         if self.right == other.right and self.left == other.left:
             return True
         #   Second case : inverted, but still same
-        elif self.right == other.left and self.left == other.right:
-            return True
-        else:
-            return False
+        return self.right == other.left and self.left == other.right
 
     def __ne__(self, other):
-        return not (Domino.__eq__(self, other))
+        return not Domino.__eq__(self, other)

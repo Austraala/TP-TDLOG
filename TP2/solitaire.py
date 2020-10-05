@@ -5,8 +5,9 @@
 
 """
 
+# Imports
 import random
-
+from domino import Domino
 
 TARGET = 12
 
@@ -20,16 +21,13 @@ class Solitaire:
 
     def __init__(self):
 
-        #   Get the Domino method from domino.py
-        from domino import Domino
-
-        #   Generate a deck full of Dominos using the init method from Class Domino
-        self._deck = ([Domino(i, j) for i in range(7) for j in range(i + 1)])
+        #   Generate a deck full of dominoes using the init method from Class Domino
+        self._deck = [Domino(i, j) for i in range(7) for j in range(i + 1)]
 
         #   Shuffle the deck afterwards
         random.shuffle(self._deck)
 
-        #   Creat an empty hand
+        #   Create an empty hand
         self.hand = []
 
         #   Draw a domino from the top of the deck
@@ -37,15 +35,27 @@ class Solitaire:
             self.hand.append(self._deck.pop())
 
     def is_game_won(self):
-        #   The game is won if the hand AND the deck are empty
+        """
+        We check if the game is won.
+        The game is won if the hand AND the deck are empty
+        """
         return len(self.hand) + len(self._deck) == 0
 
     def is_game_lost(self):
+        """
+        We check if the game is lost.
+        It is lost if no combination of dominoes can make the target
+        """
         #   We use a recursive function to check if there's a way to play
-        domino_sum_hand = [domino_in_hand.left + domino_in_hand.right for domino_in_hand in self.hand]
+        domino_sum_hand = [domino_in_hand.left + domino_in_hand.right
+                           for domino_in_hand in self.hand]
         return self.is_game_lost_aux(domino_sum_hand, TARGET)
 
     def is_game_lost_aux(self, domino_sum_hand, target):
+        """
+        This function is only called by the previous one
+        during the recursive process
+        """
         for domino_sum in domino_sum_hand:
             if domino_sum == target:
                 # Objective is 12 with the current rule-set, but it can be changed easily
@@ -60,7 +70,9 @@ class Solitaire:
         return True
 
     def turn(self):
-
+        """
+        This function calls everything needed to make a full turn of the game
+        """
         #    We print the dominoes.
         for domino in self.hand:
             index = self.hand.index(domino) + 1
@@ -76,7 +88,8 @@ class Solitaire:
             return self
 
         #   We're sure the input is only numbers, so we can transform it into a list of numbers
-        list_to_discard = list(set(string_to_discard))
+        list_to_discard = list(map(int, set(string_to_discard)))
+        list_to_discard.sort(reverse=True)
 
         #   We check that the Domino the player is trying to discard is effectively in your hand
         if max(list_to_discard) >= (len(self.hand) + 1) or min(list_to_discard) <= 0:
@@ -84,19 +97,18 @@ class Solitaire:
             return self
 
         #   This sum_score is used to calculate if the sum of the points on the dominoes
-        #       to be discarded are 12 (or TARGET).
-        sum_score = 0
-
-        for index_domino_to_discard in list_to_discard:
-            sum_score += (self.hand[int(index_domino_to_discard) - 1][0] +
-                          self.hand[int(index_domino_to_discard) - 1][1])
-            self.hand[int(index_domino_to_discard) - 1] = None
-
-        #   If the score is not TARGET, the discad is stopped.
-        if sum_score != TARGET:
-            print("The sum must be : ", TARGET)
+        #   to be discarded are 12 (or TARGET).
+        if sum([domino.left + domino.right for i, domino in enumerate(self.hand)
+                if i + 1 in list_to_discard]) != TARGET:
+            error_message = ("Your sum is {0}, it should be {1}"
+                             .format(sum([domino.left + domino.right
+                                          for i, domino in enumerate(self.hand)
+                                          if i + 1 in list_to_discard]), TARGET))
+            print(error_message)
             return self
-        self.hand = [domino for domino in self.hand if domino is not None]
+
+        for i in list_to_discard:
+            self.hand.pop(i - 1)
 
         print("Discarded !")
         print("There are ", len(self._deck), " cards in your deck !")
@@ -108,7 +120,9 @@ class Solitaire:
         return self
 
     def play(self):
-
+        """
+        This function does turns until the game is whether lost or won
+        """
         while not self.is_game_won():
             self.turn()
             if self.is_game_lost():
