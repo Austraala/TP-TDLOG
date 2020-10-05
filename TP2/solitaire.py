@@ -1,7 +1,7 @@
-""" This is the domino game
+""" File for the class "Solitaire"
 
    Jean-Loup Raymond & Benjamin Roulin
-   ENPC - (c) 03/10/2020
+   ENPC - (c) 05/10/2020
 
 """
 
@@ -12,8 +12,10 @@ TARGET = 12
 
 
 class Solitaire:
-    """ We define a class for the game
-    it contains a list of dominoes, called 
+    """
+    We define a class for the game
+    it contains 2 lists of lists with 2 elements
+    a deck, and a hand
     """
     def __init__(self):
         self._deck = ([[i, j] for i in range(7) for j in range(i + 1)])

@@ -1,8 +1,9 @@
-#   Fichier pour stocker la classe Domino
-#
-#   Jean-Loup Raymond & Benjamin Roulin
-#
-#   Premier jet : 05/10/2020
+""" File for the class "Domino"
+
+   Jean-Loup Raymond & Benjamin Roulin
+   ENPC - (c) 05/10/2020
+
+"""
 
 class Domino:
     #   We give the two numbers on both halves of the Domino
