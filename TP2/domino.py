@@ -11,6 +11,11 @@ class Domino:
     right = None
     left = None
 
+    #   creates a Domino
+    def __init__(self, left_number, right_number):
+        self.left = left_number
+        self.right = right_number
+
     #   First, we define all static methods needed
     @staticmethod
     def print_line():
@@ -93,3 +98,4 @@ class Domino:
 
     def __ne__(self, other):
         return not (Domino.__eq__(self, other))
+

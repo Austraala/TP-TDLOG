@@ -17,18 +17,32 @@ class Solitaire:
     it contains 2 lists of lists with 2 elements
     a deck, and a hand
     """
+
     def __init__(self):
-        self._deck = ([[i, j] for i in range(7) for j in range(i + 1)])
+
+        #   Get the Domino method from domino.py
+        from domino import Domino
+
+        #   Generate a deck full of Dominos using the init method from Class Domino
+        self._deck = ([Domino(i, j) for i in range(7) for j in range(i + 1)])
+
+        #   Shuffle the deck afterwards
         random.shuffle(self._deck)
+
+        #   Creat an empty hand
         self.hand = []
+
+        #   Draw a domino from the top of the deck
         while len(self.hand) < 7 and self._deck:
             self.hand.append(self._deck.pop())
 
     def is_game_won(self):
+        #   The game is won if the hand AND the deck are empty
         return len(self.hand) + len(self._deck) == 0
 
     def is_game_lost(self):
-        domino_sum_hand = [domino[0] + domino[1] for domino in self.hand]
+        #   We use a recursive function to check if there's a way to play
+        domino_sum_hand = [domino_in_hand.left + domino_in_hand.right for domino_in_hand in self.hand]
         return self.is_game_lost_aux(domino_sum_hand, TARGET)
 
     def is_game_lost_aux(self, domino_sum_hand, target):
@@ -47,21 +61,28 @@ class Solitaire:
 
     def turn(self):
 
+        #    We print the dominoes.
         for domino in self.hand:
             print(domino.__str__())
 
+        #   We wait for the discard.
         string_to_discard = input()
 
+        #   We check if there are only numbers in the input.
         if not string_to_discard.isnumeric():
             print("You must only input numbers !")
             return self
 
+        #   We're sure the input is only numbers, so we can transform it into a list of numbers
         list_to_discard = list(set(string_to_discard))
 
+        #   We check that the Domino the player is trying to discard is effectively in your hand
         if max(list_to_discard) >= (len(self.hand) + 1) or min(list_to_discard) <= 0:
             print("That's not a valid index (you have only ", len(self.hand), " cards in hand)!")
             return self
 
+        #   This sum_score is used to calculate if the sum of the points on the dominoes
+        #       to be discarded are 12 (or TARGET).
         sum_score = 0
 
         for index_domino_to_discard in list_to_discard:
@@ -69,6 +90,7 @@ class Solitaire:
                           self.hand[int(index_domino_to_discard) - 1][1])
             self.hand[int(index_domino_to_discard) - 1] = None
 
+        #   If the score is not TARGET, the discad is stopped.
         if sum_score != TARGET:
             print("The sum must be : ", TARGET)
             return self
