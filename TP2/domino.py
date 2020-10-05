@@ -63,7 +63,7 @@ class Domino:
         left_line_1, left_line_2, left_line_3 = Domino.create_str_domino(domino_to_print.left)
         right_line_1, right_line_2, right_line_3 = Domino.create_str_domino(domino_to_print.right)
         line_1 = '      |{0}|{1}|'.format(left_line_1, right_line_1)
-        line_2 = '({0}) |{0}|{1}|'.format(domino_to_print.index, left_line_2, right_line_2)
+        line_2 = '({0}) |{1}|{2}|'.format(domino_to_print.index, left_line_2, right_line_2)
         line_3 = '      |{0}|{1}|'.format(left_line_3, right_line_3)
 
         printed_lines = [line_1, line_2, line_3]
