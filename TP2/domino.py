@@ -20,6 +20,8 @@ class Domino:
 
     #   creates a Domino
     def __init__(self, left_number, right_number):
+        assert 0 <= left_number <= 6
+        assert 0 <= right_number <= 6
         self.left = left_number
         self.right = right_number
 
