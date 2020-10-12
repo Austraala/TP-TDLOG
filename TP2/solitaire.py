@@ -87,7 +87,6 @@ class Solitaire:
             list_to_discard = list(map(int, set(string_to_discard)))
             list_to_discard.sort(reverse=True)
             domino_sum_to_discard = [self.hand[i-1].left + self.hand[i-1].right for i in list_to_discard]
-            print(domino_sum_to_discard)
             if sum(domino_sum_to_discard) != TARGET:
                 raise MyError()
         except ValueError:

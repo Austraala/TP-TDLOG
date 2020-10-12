@@ -13,7 +13,7 @@
 ####
 # Note : 3
 # - gros bug à l'éxécution :
-#   TypeError: '>=' not supported between instances of 'str' and 'int'
+#   TypeError: '>=' not supported between instances of 'str' and 'int' ##
 # - problème d'utilisation des classes : utilisez self.print_one_domino() et
 #   non pas Domino.print_one_domino(self) -> cela est valable partout
 # - votre implémentation de l'affichage de domino est beaucoup trop compliquée,
