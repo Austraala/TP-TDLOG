@@ -5,8 +5,8 @@ This is the main file for the domino game
 """
 
 # Imports
-from solitaire import Solitaire
+import solitaire
 
 if __name__ == '__main__':
-    game = Solitaire()
+    game = solitaire.InteractiveSolitaire()
     game.play()

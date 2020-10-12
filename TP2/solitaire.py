@@ -64,11 +64,23 @@ class Solitaire:
         for i, domino_sum in enumerate(domino_sum_hand):
             domino_sum_hand_recursive = [domino_sum_recursive for j, domino_sum_recursive
                                          in enumerate(domino_sum_hand) if j != i]
-            if self.is_game_lost_aux(domino_sum_hand_recursive, target):
+            if self.is_game_lost_aux(domino_sum_hand_recursive, target - domino_sum):
                 return False
                 # We use a recursive algorithm to check for every combination,
                 # to see if the player is stuck with an unplayable hand
         return True
+
+
+class InteractiveSolitaire(Solitaire):
+    """
+    This class extends the class Solitaire and defines methods to make it playable
+    """
+
+    def __init__(self):
+        """
+        We simply call the Solitaire init function
+        """
+        super().__init__()
 
     def turn(self):
         """
@@ -86,7 +98,7 @@ class Solitaire:
         try:
             list_to_discard = list(map(int, set(string_to_discard)))
             list_to_discard.sort(reverse=True)
-            domino_sum_to_discard = [self.hand[i-1].left + self.hand[i-1].right for i in list_to_discard]
+            domino_sum_to_discard = [self.hand[i - 1].left + self.hand[i - 1].right for i in list_to_discard]
             if sum(domino_sum_to_discard) != TARGET:
                 raise MyError()
         except ValueError:
@@ -123,3 +135,58 @@ class Solitaire:
                 print('You lost')
                 break
         print('You won')
+
+
+class AutoPlaySolitaire(Solitaire):
+    """
+    This class extends Solitaire to check for a potential solution
+    """
+
+    def __init__(self):
+        """
+        We simply call the Solitaire init function
+        """
+        super().__init__()
+
+    def find_legal_turns(self):
+        legal_turns = []
+        domino_sum_index_hand = [[domino_in_hand.left + domino_in_hand.right, i]
+                                 for i, domino_in_hand in enumerate(self.hand)]
+        return self.find_legal_turns_aux(domino_sum_index_hand, TARGET, legal_turns, [])
+
+    def find_legal_turns_aux(self, domino_sum_index_hand, target, legal_turns, current_turn):
+        for sum_index in domino_sum_index_hand:
+            if sum_index[0] == target:
+                legal_turns.append(current_turn + [sum_index[1] + 1])
+        for (domino_sum, index) in domino_sum_index_hand:
+            domino_sum_index_hand_recursive = [domino_sum_index_recursive for domino_sum_index_recursive
+                                               in domino_sum_index_hand if domino_sum_index_recursive[1] != index]
+            self.find_legal_turns_aux(domino_sum_index_hand_recursive, target - domino_sum, legal_turns,
+                                      current_turn + [index + 1])
+        return list(set([tuple(set(turn)) for turn in legal_turns]))
+
+    def find_solution(self):
+        return self.find_solution_aux(self.hand, self._deck)
+
+    def find_solution_aux(self, hand, deck):
+        solitaire = AutoPlaySolitaire()
+        solitaire.hand = hand
+        solitaire._deck = deck
+        if solitaire.is_game_won():
+            print('There is a solution')
+            return True
+        legal_turns = solitaire.find_legal_turns()
+        print(hand)
+        for turn in legal_turns:
+            hand_copy = [domino for domino in hand]
+            deck_copy = [domino for domino in deck]
+            list_turn = list(turn)
+            list_turn.sort(reverse=True)
+            for i in list_turn:
+                if list_turn:
+                    hand_copy.pop(i - 1)
+            while len(hand_copy) < 7 and deck_copy:
+                hand_copy.append(deck_copy.pop())
+            if self.find_solution_aux(hand_copy, deck_copy):
+                return True
+        return False
